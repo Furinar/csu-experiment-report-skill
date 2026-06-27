@@ -1,0 +1,8 @@
+interface:
+  display_name: "CSU Experiment Report"
+  short_description: "Create polished CSU experiment report PDFs"
+  default_prompt: "Use $csu-experiment-report-skill to create and compile a CSU experiment report."
+  trigger_command: "/csu-exp"
+
+policy:
+  allow_implicit_invocation: true
