@@ -18,10 +18,13 @@ pvc :
 	latexmk $(LATEXMK_OPT_PVC) $(REPORT)
 
 view : $(REPORT).pdf
-#for Linux user
-	xdg-open  $<
-#for Mac user
-#	open $<
+	@if command -v open >/dev/null 2>&1; then \
+		open $<; \
+	elif command -v xdg-open >/dev/null 2>&1; then \
+		xdg-open $<; \
+	else \
+		echo "Please open $< manually."; \
+	fi
 
 wordcount:
 	@texcount $(REPORT).tex -inc -ch-only | awk '/total/ {getline; print "纯中文字数\t\t\t:",$$4}'

@@ -49,6 +49,8 @@ fig.savefig(FIG_DIR / "runtime.png", bbox_inches="tight")
 plt.close(fig)
 ```
 
+These matplotlib font fallbacks are independent from the LaTeX template fonts. Keep both layers on their defaults unless the user explicitly wants custom typography.
+
 ## Style Rules
 
 - Do not draw a chart title in Python; use LaTeX `\caption{}`.

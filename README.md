@@ -140,7 +140,7 @@ C:\Users\<你的用户名>\.codex\skills\csu-experiment-report-skill
 
 1. **搭建工程**
 
-   Codex 调用 `scripts/scaffold.py` 生成 CSU LaTeX 报告项目。
+   Codex 调用 `python3 scripts/scaffold.py` 生成 CSU LaTeX 报告项目。
 
 2. **写实验计划**
 
@@ -170,6 +170,8 @@ C:\Users\<你的用户名>\.codex\skills\csu-experiment-report-skill
    xelatex -interaction=nonstopmode -file-line-error csuexperiment_main.tex
    ```
 
+   模板会在 Windows 和 macOS 上自动选择可用的中文字体回退；正常情况下不需要手动修改字体配置。
+
 6. **检查修复**
 
    Codex 根据 `.log` 检查 LaTeX 错误、图片缺失、引用未定义、表格溢出等问题，并修复到 PDF 可用。
@@ -179,9 +181,15 @@ C:\Users\<你的用户名>\.codex\skills\csu-experiment-report-skill
 | 类别 | 说明 |
 | --- | --- |
 | **Codex** | 用于识别并执行 Skill 工作流 |
-| **Python** | 用于运行 `scaffold.py`，以及按实验临场生成结果图表 |
-| **XeLaTeX** | 用于编译 CSU 实验报告 PDF |
+| **Python 3** | 用于运行 `scaffold.py`，以及按实验临场生成结果图表 |
+| **XeLaTeX** | 用于编译 CSU 实验报告 PDF；Windows 推荐 TeX Live 或 MiKTeX，macOS 推荐 MacTeX |
 | **matplotlib** | 当实验需要图表时，由 Codex 编写专用 Python 脚本使用 |
+
+## 平台支持
+
+- 支持 Windows 和 macOS 的常见 XeLaTeX 环境。
+- 中文字体默认按平台自动回退，目标是免配置编译成功；两端字形可能略有差异，但版式应保持稳定。
+- `make view` 在 macOS 使用 `open`，在 Linux 使用 `xdg-open`；Windows 可直接双击生成的 PDF 文件。
 
 ## 设计取舍
 

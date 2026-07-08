@@ -14,13 +14,14 @@ Create a complete CSU experiment report with a Mrite-style workflow: understand 
 - Use the default CSU chapter structure unless the user provides a custom structure or a complete `content.tex`.
 - Base results on user-provided code, data, screenshots, logs, or a reproducible script written for this specific experiment.
 - Write formal Chinese report prose. Avoid generic filler and remove all template instruction text from final `.tex` files.
+- Assume the bundled template should compile on common Windows and macOS XeLaTeX environments without manual font edits; if XeLaTeX itself is missing, report that prerequisite clearly.
 
 ## Workflow
 
 1. **Scaffold the report**
    Run the only bundled script:
    ```bash
-   python <skill_dir>/scripts/scaffold.py \
+   python3 <skill_dir>/scripts/scaffold.py \
      --output <output_dir> \
      --title "<experiment title>" \
      --author "<student name or placeholder>" \
@@ -48,6 +49,7 @@ Create a complete CSU experiment report with a Mrite-style workflow: understand 
    xelatex -interaction=nonstopmode -file-line-error csuexperiment_main.tex
    xelatex -interaction=nonstopmode -file-line-error csuexperiment_main.tex
    ```
+   The bundled template selects reasonable Chinese font fallbacks for Windows and macOS automatically. Do not ask the user to edit the font configuration unless they explicitly want custom typography.
    Inspect the `.log` file for errors, missing figures, undefined references, overfull boxes, and obvious layout problems. Fix and recompile until the PDF is usable.
 
 6. **Report result**

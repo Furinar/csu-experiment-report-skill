@@ -103,7 +103,7 @@
 %
 % 进行相关字体设置，定义必须的新字体
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO: Times New Roman目前只能在Windows上使用，需要增加Linux系统字体
+% 拉丁字体由文档类加载；这里补充中文字体的跨平台回退策略。
 % \setmainfont{Times New Roman}
 % \setmonofont{Courier New}
 % \setsansfont{Arial}
@@ -115,21 +115,123 @@
 %     \belowdisplayshortskip 6.5\p@ \@plus3.5\p@ \@minus3\p@
 % }
 
-% Windows 设置
-\setCJKmainfont{SimSun}[AutoFakeBold, AutoFakeSlant]
-\setCJKsansfont{SimHei}[AutoFakeBold, AutoFakeSlant]
-\setCJKmonofont{FangSong}[AutoFakeBold, AutoFakeSlant]
-% % 协议页的标题按模板是华文新魏
-% % Fix: 合并为 newCJKfontfamily
-\newCJKfontfamily[hwxw]\hwxw{STXinwei}[BoldFont=*, ItalicFont=*, BoldItalicFont=*]
-% \newCJKfontfamily[zysong]\songti{SimSun}[BoldFont=*, ItalicFont=*, BoldItalicFont=*]
-\newCJKfontfamily[zysong]\songti{SimSun}[AutoFakeBold={3.17}]
-\newCJKfontfamily[zyhei]\heiti{SimHei}[AutoFakeBold={3.17}]
-\newCJKfontfamily[zykai]\kaiti{KaiTi}[AutoFakeBold={3.17}]
-\newCJKfontfamily[kaitigb]\kgb{KaiTi_GB2312.ttf}[AutoFakeBold={3.17}]
-% % 重定义ctex定义好的宋体和黑体，以支持伪加粗AutoFakeBold
-% % 即支持类似word里的给黑体、宋体等中文字体加粗的操作，用\bfseries
-\newfontfamily{\enheiti}{SimHei} % 解决标题英文括号不显示黑体
+% 按字体可用性回退，优先 Windows 常见字体，其次 macOS，最后回退到 TeX Live 自带字体。
+\newcommand{\csu@set@cjkmainfont}[1]{\setCJKmainfont{#1}[AutoFakeBold, AutoFakeSlant]}
+\newcommand{\csu@set@cjksansfont}[1]{\setCJKsansfont{#1}[AutoFakeBold, AutoFakeSlant]}
+\newcommand{\csu@set@cjkmonofont}[1]{\setCJKmonofont{#1}[AutoFakeBold, AutoFakeSlant]}
+\newcommand{\csu@set@songtifont}[1]{\newCJKfontfamily[zysong]\songti{#1}[AutoFakeBold={3.17}]}
+\newcommand{\csu@set@heitifont}[1]{\newCJKfontfamily[zyhei]\heiti{#1}[AutoFakeBold={3.17}]}
+\newcommand{\csu@set@kaitifont}[1]{\newCJKfontfamily[zykai]\kaiti{#1}[AutoFakeBold={3.17}]}
+\newcommand{\csu@set@coverfont}[1]{\newCJKfontfamily[hwxw]\hwxw{#1}[BoldFont=*, ItalicFont=*, BoldItalicFont=*]}
+\newcommand{\csu@set@englishboldfont}[1]{\newfontfamily{\enheiti}{#1}}
+
+\IfFontExistsTF{SimSun}{
+    \csu@set@cjkmainfont{SimSun}
+    \csu@set@songtifont{SimSun}
+}{
+    \IfFontExistsTF{Songti SC}{
+        \csu@set@cjkmainfont{Songti SC}
+        \csu@set@songtifont{Songti SC}
+    }{
+        \IfFontExistsTF{STSong}{
+            \csu@set@cjkmainfont{STSong}
+            \csu@set@songtifont{STSong}
+        }{
+            \csu@set@cjkmainfont{FandolSong-Regular}
+            \csu@set@songtifont{FandolSong-Regular}
+        }
+    }
+}
+
+\IfFontExistsTF{SimHei}{
+    \csu@set@cjksansfont{SimHei}
+    \csu@set@heitifont{SimHei}
+}{
+    \IfFontExistsTF{Heiti SC}{
+        \csu@set@cjksansfont{Heiti SC}
+        \csu@set@heitifont{Heiti SC}
+    }{
+        \IfFontExistsTF{STHeiti}{
+            \csu@set@cjksansfont{STHeiti}
+            \csu@set@heitifont{STHeiti}
+        }{
+            \IfFontExistsTF{PingFang SC}{
+                \csu@set@cjksansfont{PingFang SC}
+                \csu@set@heitifont{PingFang SC}
+            }{
+                \csu@set@cjksansfont{FandolHei-Regular}
+                \csu@set@heitifont{FandolHei-Regular}
+            }
+        }
+    }
+}
+
+\IfFontExistsTF{FangSong}{
+    \csu@set@cjkmonofont{FangSong}
+}{
+    \IfFontExistsTF{STFangsong}{
+        \csu@set@cjkmonofont{STFangsong}
+    }{
+        \csu@set@cjkmonofont{FandolFang-Regular}
+    }
+}
+
+\IfFontExistsTF{STXinwei}{
+    \csu@set@coverfont{STXinwei}
+}{
+    \IfFontExistsTF{STKaiti}{
+        \csu@set@coverfont{STKaiti}
+    }{
+        \IfFontExistsTF{Kaiti SC}{
+            \csu@set@coverfont{Kaiti SC}
+        }{
+            \IfFontExistsTF{KaiTi}{
+                \csu@set@coverfont{KaiTi}
+            }{
+                \csu@set@coverfont{FandolKai-Regular}
+            }
+        }
+    }
+}
+
+\IfFontExistsTF{KaiTi}{
+    \csu@set@kaitifont{KaiTi}
+}{
+    \IfFontExistsTF{Kaiti SC}{
+        \csu@set@kaitifont{Kaiti SC}
+    }{
+        \IfFontExistsTF{STKaiti}{
+            \csu@set@kaitifont{STKaiti}
+        }{
+            \csu@set@kaitifont{FandolKai-Regular}
+        }
+    }
+}
+
+\IfFileExists{KaiTi_GB2312.ttf}{
+    \newCJKfontfamily[kaitigb]\kgb{KaiTi_GB2312.ttf}[AutoFakeBold={3.17}]
+}{
+    \IfFontExistsTF{KaiTi}{
+        \newCJKfontfamily[kaitigb]\kgb{KaiTi}[AutoFakeBold={3.17}]
+    }{
+        \IfFontExistsTF{Kaiti SC}{
+            \newCJKfontfamily[kaitigb]\kgb{Kaiti SC}[AutoFakeBold={3.17}]
+        }{
+            \newCJKfontfamily[kaitigb]\kgb{FandolKai-Regular}[AutoFakeBold={3.17}]
+        }
+    }
+}
+
+% 重定义ctex定义好的字体，以支持伪加粗 AutoFakeBold，并为英文字符提供稳定的粗体无衬线字体。
+\IfFontExistsTF{Arial}{
+    \csu@set@englishboldfont{Arial}
+}{
+    \IfFontExistsTF{Helvetica}{
+        \csu@set@englishboldfont{Helvetica}
+    }{
+        \csu@set@englishboldfont{TeX Gyre Heros}
+    }
+}
 
 % 预定义名称
 \newcommand*{\csu@name@cover}{扉页}
@@ -746,6 +848,5 @@
 % ---------------------------------------------------------%
 % 篇眉从正文开始至全文结束，采用宋体五号字左起书写“博（或硕）士学位论文”，靠右写章标题。
 % 页码从正文开始至全文结束按阿拉伯数字连续编排，前置部分（如学位论文原创性声明和版权使用授权书、中文摘要、英文摘要、目录、符号说明等）用罗马数字分别单独编排。页码位于页面底端，居中书写。
-
 
 

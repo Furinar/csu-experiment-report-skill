@@ -78,8 +78,11 @@ xelatex -interaction=nonstopmode -file-line-error csuexperiment_main.tex
 xelatex -interaction=nonstopmode -file-line-error csuexperiment_main.tex
 ```
 
+The bundled template now chooses Chinese font fallbacks automatically on common Windows and macOS environments. Keep the default font configuration unless the user explicitly asks for custom typography.
+
 Fix the first real error before chasing later errors. Common fixes:
 - Missing image: copy the file into `figures/` or correct the path.
 - Overfull table: switch to `longtable`, reduce text, or shrink column widths.
 - Unescaped `_`, `%`, `&`, or `#`: escape it in prose and captions.
 - Undefined reference: compile twice after labels are corrected.
+- `fontspec` or `xeCJK` cannot find a font: first confirm the build is using `xelatex`; if it is, revert to the template defaults before trying custom font edits.

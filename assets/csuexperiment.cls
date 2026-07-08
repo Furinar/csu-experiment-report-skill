@@ -627,9 +627,9 @@
 % }
 % latinfontset 是csu的key 使用 对应的kv接口调用  现在没有实现
 % \csu@load@fontset@latinfontset
-% Windows系统请使用 times 字体集
+% 拉丁字体默认使用 times 字体集，兼容 Windows 与 macOS 的常见 TeX 环境。
 \csu@load@fontset@times
-% linux系统请使用 stix 字体集
+% 如需其他平台专用拉丁字体集，可在后续版本扩展。
 % \csu@load@fontset@stix
 % \csu@option@hook{csu}{latinfontset}{%
 %   \csu@load@fontset
